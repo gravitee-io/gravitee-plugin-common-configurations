@@ -1,0 +1,377 @@
+{
+    "$schema": "http:/json-schema.org/draft-07/schema#",
+    "type": "object",
+    "gioClass": "io.gravitee.plugin.configurations.ssl.SslOptions",
+    "gioExternalDefinitions": {
+        "sslOptions": {
+            "type": "object",
+            "title": "SSL Options",
+            "properties": {
+                "hostnameVerifier": {
+                    "$ref": "#/gioExternalDefinitions/sslTrustStoreHostnameVerifier"
+                },
+                "trustAll": {
+                    "$ref": "#/gioExternalDefinitions/sslTrustStoreTrustAll"
+                },
+                "trustStore": {
+                    "type": "object",
+                    "title": "Truststore",
+                    "description": "All fields supports EL and secrets",
+                    "oneOf": [
+                        {
+                            "type": "object",
+                            "title": "None",
+                            "properties": {
+                                "type": {
+                                    "const": ""
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "title": "JKS with path",
+                            "properties": {
+                                "type": {
+                                    "const": "JKS"
+                                },
+                                "password": {
+                                    "$ref": "#/gioExternalDefinitions/sslTrustStorePassword"
+                                },
+                                "path": {
+                                    "$ref": "#/gioExternalDefinitions/sslTrustStorePath"
+                                }
+                            },
+                            "required": ["password", "path"]
+                        },
+                        {
+                            "type": "object",
+                            "title": "JKS with content",
+                            "properties": {
+                                "type": {
+                                    "const": "JKS"
+                                },
+                                "password": {
+                                    "$ref": "#/gioExternalDefinitions/sslTrustStorePassword"
+                                },
+                                "content": {
+                                    "$ref": "#/gioExternalDefinitions/sslTrustStoreContent"
+                                }
+                            },
+                            "required": ["password", "content"]
+                        },
+                        {
+                            "type": "object",
+                            "title": "PKCS#12 / PFX with path",
+                            "properties": {
+                                "type": {
+                                    "const": "PKCS12"
+                                },
+                                "password": {
+                                    "$ref": "#/gioExternalDefinitions/sslTrustStorePassword"
+                                },
+                                "path": {
+                                    "$ref": "#/gioExternalDefinitions/sslTrustStorePath"
+                                }
+                            },
+                            "required": ["password", "path"]
+                        },
+                        {
+                            "type": "object",
+                            "title": "PKCS#12 / PFX with content",
+                            "properties": {
+                                "type": {
+                                    "const": "PKCS12"
+                                },
+                                "password": {
+                                    "$ref": "#/gioExternalDefinitions/sslTrustStorePassword"
+                                },
+                                "content": {
+                                    "$ref": "#/gioExternalDefinitions/sslTrustStoreContent"
+                                }
+                            },
+                            "required": ["password", "content"]
+                        },
+                        {
+                            "type": "object",
+                            "title": "PEM with path",
+                            "properties": {
+                                "type": {
+                                    "const": "PEM"
+                                },
+                                "path": {
+                                    "$ref": "#/gioExternalDefinitions/sslTrustStorePath"
+                                }
+                            },
+                            "required": ["path"]
+                        },
+                        {
+                            "type": "object",
+                            "title": "PEM with content",
+                            "properties": {
+                                "type": {
+                                    "const": "PEM"
+                                },
+                                "content": {
+                                    "$ref": "#/gioExternalDefinitions/sslTrustStoreContent"
+                                }
+                            },
+                            "required": ["content"]
+                        }
+                    ]
+                },
+                "keyStore": {
+                    "type": "object",
+                    "title": "Key store",
+                    "description": "All fields supports EL and secrets",
+                    "oneOf": [
+                        {
+                            "type": "object",
+                            "title": "None",
+                            "properties": {
+                                "type": {
+                                    "const": ""
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "title": "JKS with path",
+                            "properties": {
+                                "type": {
+                                    "const": "JKS"
+                                },
+                                "password": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStorePassword"
+                                },
+                                "alias": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStoreAlias"
+                                },
+                                "keyPassword": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStoreKeyPassword"
+                                },
+                                "path": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStorePath"
+                                }
+                            },
+                            "required": ["password", "path"]
+                        },
+                        {
+                            "type": "object",
+                            "title": "JKS with content",
+                            "properties": {
+                                "type": {
+                                    "const": "JKS"
+                                },
+                                "password": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStorePassword"
+                                },
+                                "alias": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStoreAlias"
+                                },
+                                "keyPassword": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStoreKeyPassword"
+                                },
+                                "content": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStoreContent"
+                                }
+                            },
+                            "required": ["password", "content"]
+                        },
+                        {
+                            "type": "object",
+                            "title": "PKCS#12 / PFX with path",
+                            "properties": {
+                                "type": {
+                                    "const": "PKCS12"
+                                },
+                                "password": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStorePassword"
+                                },
+                                "alias": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStoreAlias"
+                                },
+                                "keyPassword": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStoreKeyPassword"
+                                },
+                                "path": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStorePath"
+                                }
+                            },
+                            "required": ["password", "path"]
+                        },
+                        {
+                            "type": "object",
+                            "title": "PKCS#12 / PFX with content",
+                            "properties": {
+                                "type": {
+                                    "const": "PKCS12"
+                                },
+                                "password": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStorePassword"
+                                },
+                                "alias": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStoreAlias"
+                                },
+                                "keyPassword": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStoreKeyPassword"
+                                },
+                                "content": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStoreContent"
+                                }
+                            },
+                            "required": ["password", "content"]
+                        },
+                        {
+                            "type": "object",
+                            "title": "PEM with path",
+                            "properties": {
+                                "type": {
+                                    "const": "PEM"
+                                },
+                                "certPath": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStoreCertPath"
+                                },
+                                "keyPath": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStoreKeyPath"
+                                }
+                            },
+                            "required": ["certPath", "keyPath"]
+                        },
+                        {
+                            "type": "object",
+                            "title": "PEM with content",
+                            "properties": {
+                                "type": {
+                                    "const": "PEM"
+                                },
+                                "certContent": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStoreCertContent"
+                                },
+                                "keyContent": {
+                                    "$ref": "#/gioExternalDefinitions/sslKeyStoreKeyContent"
+                                }
+                            },
+                            "required": ["certContent", "keyContent"]
+                        }
+                    ]
+                }
+            }
+        },
+        "sslTrustStoreHostnameVerifier": {
+            "title": "Verify Host",
+            "description": "Use to enable host name verification",
+            "type": "boolean",
+            "default": true
+        },
+        "sslTrustStoreTrustAll": {
+            "title": "Trust all",
+            "description": "Use this with caution (if over Internet). The gateway must trust any origin certificates. The connection will still be encrypted but this mode is vulnerable to 'man in the middle' attacks.",
+            "type": "boolean",
+            "default": false
+        },
+        "sslTrustStorePassword": {
+            "type": "string",
+            "title": "Password",
+            "description": "Truststore password",
+            "format": "password",
+            "gioConfig": {
+                "banner": {
+                    "title": "SSL truststore password",
+                    "text": "The password for the truststore file. If a password is not set, truststore file configured will still be used, but integrity checking is disabled. Truststore password is not supported for PEM format."
+                }
+            }
+        },
+        "sslTrustStorePath": {
+            "type": "string",
+            "title": "Path to truststore",
+            "description": "Path to the truststore file",
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "sslTrustStoreContent": {
+            "type": "string",
+            "title": "Content",
+            "description": "Binary content as Base64",
+            "format": "text",
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "sslKeyStorePassword": {
+            "type": "string",
+            "title": "Password",
+            "description": "Password to use to open the key store",
+            "format": "password",
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "sslKeyStoreAlias": {
+            "type": "string",
+            "title": "Alias for the key",
+            "description": "Alias of the key to use in case the key store contains more than one key",
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "sslKeyStoreKeyPassword": {
+            "type": "string",
+            "title": "Key Password",
+            "description": "Password to use to access the key when protected by password",
+            "format": "password",
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "sslKeyStorePath": {
+            "type": "string",
+            "title": "Path to key store",
+            "description": "Path to the key store file",
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "sslKeyStoreContent": {
+            "type": "string",
+            "title": "Content",
+            "description": "Binary content as Base64",
+            "format": "text",
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "sslKeyStoreCertPath": {
+            "type": "string",
+            "title": "Path to cert file",
+            "description": "Path to cert file (.PEM)",
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "sslKeyStoreCertContent": {
+            "type": "string",
+            "title": "Certificate",
+            "format": "text",
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "sslKeyStoreKeyPath": {
+            "type": "string",
+            "title": "Path to private key file",
+            "description": "Path to private key file (.PEM)",
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "sslKeyStoreKeyContent": {
+            "type": "string",
+            "title": "Private key",
+            "format": "text",
+            "gioConfig": {
+                "el": true
+            }
+        }
+    }
+}
