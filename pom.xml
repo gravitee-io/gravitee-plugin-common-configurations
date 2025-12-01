@@ -30,6 +30,7 @@
     <groupId>io.gravitee.plugin</groupId>
     <artifactId>gravitee-plugin-common-configurations</artifactId>
     <version>1.0.0-alpha.1</version>
+    <name>Gravitee.io - Plugin - Common Configurations</name>
 
     <properties>
         <gravitee-bom.version>8.3.47</gravitee-bom.version>
@@ -37,6 +38,7 @@
         <mapstruct.version>1.6.3</mapstruct.version>
         <gravitee-node.version>7.17.1</gravitee-node.version>
         <gravitee-secret-api.version>2.0.0</gravitee-secret-api.version>
+        <lombok.version>1.18.36</lombok.version>
     </properties>
 
     <dependencyManagement>
@@ -103,7 +105,6 @@
     </dependencies>
 
     <build>
-        <pluginManagement>
             <plugins>
                 <plugin>
                     <groupId>org.projectlombok</groupId>
@@ -124,6 +125,7 @@
                         <dependency>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -144,7 +146,6 @@
                     </executions>
                 </plugin>
             </plugins>
-        </pluginManagement>
     </build>
 
 </project>
