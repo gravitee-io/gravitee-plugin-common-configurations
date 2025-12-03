@@ -16,7 +16,7 @@
                 "trustStore": {
                     "type": "object",
                     "title": "Truststore",
-                    "description": "All fields supports EL and secrets",
+                    "description": "All fields support EL and secrets",
                     "oneOf": [
                         {
                             "type": "object",
@@ -122,7 +122,7 @@
                 "keyStore": {
                     "type": "object",
                     "title": "Key store",
-                    "description": "All fields supports EL and secrets",
+                    "description": "All fields support EL and secrets",
                     "oneOf": [
                         {
                             "type": "object",
