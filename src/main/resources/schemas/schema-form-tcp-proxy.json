@@ -1,9 +1,9 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "gioClass": "io.gravitee.plugin.configurations.http.HttpProxyOptions",
+    "gioClass": "io.gravitee.plugin.configurations.http.HttpClientOptionsConfiguration",
     "gioExternalDefinitions": {
-        "httpProxyOptions": {
+        "tcpProxyOptions": {
             "type": "object",
             "title": "Proxy Options",
             "oneOf": [
@@ -44,16 +44,13 @@
                             "type": "string",
                             "title": "Proxy Type",
                             "description": "The type of the proxy",
-                            "default": "HTTP",
-                            "enum": ["HTTP", "SOCKS4", "SOCKS5"]
+                            "default": "SOCKS5",
+                            "enum": ["SOCKS4", "SOCKS5"]
                         },
                         "host": {
                             "type": "string",
                             "title": "Proxy host",
-                            "description": "Proxy host to connect to. (Supports EL)",
-                            "gioConfig": {
-                                "el": true
-                            }
+                            "description": "Proxy host to connect to"
                         },
                         "port": {
                             "type": "integer",
@@ -63,19 +60,13 @@
                         "username": {
                             "type": "string",
                             "title": "Proxy username",
-                            "description": "Optional proxy username. (Supports EL and secrets)",
-                            "gioConfig": {
-                                "el": true
-                            }
+                            "description": "Optional proxy username"
                         },
                         "password": {
                             "type": "string",
                             "title": "Proxy password",
-                            "description": "Optional proxy password. (Supports EL and secrets)",
-                            "format": "password",
-                            "gioConfig": {
-                                "el": true
-                            }
+                            "description": "Optional proxy password",
+                            "format": "password"
                         }
                     },
                     "required": ["host", "port"],

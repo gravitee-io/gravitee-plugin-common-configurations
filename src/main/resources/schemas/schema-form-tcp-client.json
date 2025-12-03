@@ -1,0 +1,79 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "gioClass": "io.gravitee.plugin.configurations.http.HttpClientOptionsConfiguration",
+    "gioExternalDefinitions": {
+        "tcpClientOptions": {
+            "title": "TCP Client Options",
+            "type": "object",
+            "javaType": "io.gravitee.plugin.configurations.tcp.TcpClientOptions",
+            "properties": {
+                "connectTimeout": {
+                    "$ref": "#/gioExternalDefinitions/connectTimeout"
+                },
+                "reconnectAttempts": {
+                    "$ref": "#/gioExternalDefinitions/reconnectAttempts"
+                },
+                "reconnectInterval": {
+                    "$ref": "#/gioExternalDefinitions/reconnectInterval"
+                },
+                "idleTimeout": {
+                    "$ref": "#/gioExternalDefinitions/idleTimeout"
+                },
+                "readIdleTimeout": {
+                    "$ref": "#/gioExternalDefinitions/readIdleTimeout"
+                },
+                "writeIdleTimeout": {
+                    "$ref": "#/gioExternalDefinitions/writeIdleTimeout"
+                }
+            }
+        },
+        "connectTimeout": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 3000,
+            "title": "Connection timeout",
+            "description": "Timeout in ms to connect to the target"
+        },
+        "reconnectAttempts": {
+            "type": "integer",
+            "default": 3,
+            "minimum": 0,
+            "title": "Reconnect attempts",
+            "description": "How much we try connecting to the target, 0 means: no retry"
+        },
+        "reconnectInterval": {
+            "type": "integer",
+            "default": 1000,
+            "minimum": 0,
+            "title": "Reconnect interval",
+            "description": "Interval in ms between retries connecting to the target"
+        },
+        "idleTimeout": {
+            "type": "integer",
+            "default": 0,
+            "minimum": 0,
+            "title": "Idle timeout (ms)",
+            "gioConfig": {
+                "banner": {
+                    "title": "Idle timeout",
+                    "text": "Maximum time a TCP connection will stay active if no data is received or sent in milliseconds. Once the timeout has elapsed, the unused connection will be closed, allowing to free the associated resources. Zero means no timeout."
+                }
+            }
+        },
+        "readIdleTimeout": {
+            "type": "integer",
+            "default": 0,
+            "minimum": 0,
+            "title": "Read idle timeout (ms)",
+            "description": "This determines if a connection will timeout and be closed if no data is received within the timeout."
+        },
+        "writeIdleTimeout": {
+            "type": "integer",
+            "default": 0,
+            "minimum": 0,
+            "title": "Write idle timeout (ms)",
+            "description": "This determines if a connection will timeout and be closed if no data is sent within the timeout."
+        }
+    }
+}

@@ -1,0 +1,34 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "gioClass": "io.gravitee.plugin.configurations.http.HttpClientOptionsConfiguration",
+    "gioExternalDefinitions": {
+        "tcpTarget": {
+            "title": "Target server",
+            "description": "The target properties to use to contact the backend",
+            "type": "object",
+            "properties": {
+                "host": {
+                    "type": "string",
+                    "title": "Host",
+                    "description": "Backend host to connect to, name or IP"
+                },
+                "port": {
+                    "type": "integer",
+                    "title": "Port",
+                    "description": "Backend port",
+                    "minimum": 1,
+                    "maximum": 65535
+                },
+                "secured": {
+                    "type": "boolean",
+                    "title": "Is target secured",
+                    "description": "Enable SSL to connect to target",
+                    "default": false
+                },
+                "additionalProperties": false
+            },
+            "required": ["host", "port", "secured"]
+        }
+    }
+}
