@@ -1,3 +1,10 @@
+# [1.0.0-alpha.3](https://github.com/gravitee-io/gravitee-plugin-common-configurations/compare/1.0.0-alpha.2...1.0.0-alpha.3) (2025-12-04)
+
+
+### Bug Fixes
+
+* standardize EL support label ([733c576](https://github.com/gravitee-io/gravitee-plugin-common-configurations/commit/733c576aba2801a7b55bd6f29eb3a13f7277a321))
+
 # [1.0.0-alpha.2](https://github.com/gravitee-io/gravitee-plugin-common-configurations/compare/1.0.0-alpha.1...1.0.0-alpha.2) (2025-12-01)
 
 
