@@ -50,7 +50,7 @@
                         "host": {
                             "type": "string",
                             "title": "Proxy host",
-                            "description": "Proxy host to connect to. Supports EL.",
+                            "description": "Proxy host to connect to. (Supports EL)",
                             "gioConfig": {
                                 "el": true
                             }
