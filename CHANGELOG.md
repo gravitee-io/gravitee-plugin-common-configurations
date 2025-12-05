@@ -1,3 +1,10 @@
+# [1.0.0-alpha.4](https://github.com/gravitee-io/gravitee-plugin-common-configurations/compare/1.0.0-alpha.3...1.0.0-alpha.4) (2025-12-05)
+
+
+### Features
+
+* add tcp configuration ([abcb968](https://github.com/gravitee-io/gravitee-plugin-common-configurations/commit/abcb968a1310d95760df21be91c93f89848be516))
+
 # [1.0.0-alpha.3](https://github.com/gravitee-io/gravitee-plugin-common-configurations/compare/1.0.0-alpha.2...1.0.0-alpha.3) (2025-12-04)
 
 
