@@ -1,3 +1,17 @@
+# 1.0.0 (2025-12-11)
+
+
+### Bug Fixes
+
+* fix pom for javadoc generation ([ae387ce](https://github.com/gravitee-io/gravitee-plugin-common-configurations/commit/ae387ce2dbcc16f3490bb59ed35307c20fee3938))
+* standardize EL support label ([418c6c1](https://github.com/gravitee-io/gravitee-plugin-common-configurations/commit/418c6c1221fb017f00dea50361ec3fa1a2a90597))
+
+
+### Features
+
+* add tcp configuration ([76c16ff](https://github.com/gravitee-io/gravitee-plugin-common-configurations/commit/76c16ff92da74bab33cd09fc44e7cd2b1d19fcab))
+* share http proxy and client options, and ssl options ([136d9bf](https://github.com/gravitee-io/gravitee-plugin-common-configurations/commit/136d9bf2c408a28f8d001ca64dd0a5f3a10332ac))
+
 # [1.0.0-alpha.4](https://github.com/gravitee-io/gravitee-plugin-common-configurations/compare/1.0.0-alpha.3...1.0.0-alpha.4) (2025-12-05)
 
 
