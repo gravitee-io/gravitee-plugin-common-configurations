@@ -128,8 +128,13 @@
             "default": true,
             "gioConfig": {
                 "banner": {
-                    "title": "Enable keep-alive",
-                    "text": "Use an HTTP persistent connection to send and receive multiple HTTP requests / responses."
+                    "title": "Keep-alive (always keep-alive for HTTP/2)",
+                    "text": "Use an HTTP persistent connection to send and receive multiple HTTP requests / responses. This option is ignored for HTTP/2 as keep-alive is always enabled."
+                },
+                "disableIf": {
+                    "$eq": {
+                        "value.http.version": "HTTP_2"
+                    }
                 }
             }
         },
@@ -151,8 +156,13 @@
             "default": false,
             "gioConfig": {
                 "banner": {
-                    "title": "Enable HTTP pipelining",
-                    "text": "When pipe-lining is enabled requests will be written to connections without waiting for previous responses to return"
+                    "title": "Enable HTTP pipelining (does not apply to HTTP/2)",
+                    "text": "When pipelining is enabled requests will be written to connections without waiting for previous responses to return. This option is ignored for HTTP/2 as pipelining is not applicable."
+                },
+                "disableIf": {
+                    "$eq": {
+                        "value.http.version": "HTTP_2"
+                    }
                 }
             }
         },
