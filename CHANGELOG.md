@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/gravitee-io/gravitee-plugin-common-configurations/compare/1.0.0...1.1.0) (2026-01-21)
+
+
+### Features
+
+* refine some default http2 settings ([d9cb7a0](https://github.com/gravitee-io/gravitee-plugin-common-configurations/commit/d9cb7a029970bdd5d0c099b223a9edf7fcb4eb7a))
+
 # 1.0.0 (2025-12-11)
 
 
