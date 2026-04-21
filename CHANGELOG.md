@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/gravitee-io/gravitee-plugin-common-configurations/compare/1.2.0...1.2.1) (2026-04-21)
+
+
+### Bug Fixes
+
+* **redis:** default sentinel enabled to true to preserve backcompat ([#15](https://github.com/gravitee-io/gravitee-plugin-common-configurations/issues/15)) ([f203cf2](https://github.com/gravitee-io/gravitee-plugin-common-configurations/commit/f203cf2ac2552a17646430eb7fe3f480124c6bb0))
+
 # [1.2.0](https://github.com/gravitee-io/gravitee-plugin-common-configurations/compare/1.1.0...1.2.0) (2026-04-21)
 
 
