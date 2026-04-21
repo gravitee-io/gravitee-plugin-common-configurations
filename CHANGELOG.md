@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/gravitee-io/gravitee-plugin-common-configurations/compare/1.1.0...1.2.0) (2026-04-21)
+
+
+### Features
+
+* **redis:** add RedisClientOptions and mapper for Vert.x 5 ([#14](https://github.com/gravitee-io/gravitee-plugin-common-configurations/issues/14)) ([c173252](https://github.com/gravitee-io/gravitee-plugin-common-configurations/commit/c1732523668fbccf4528777155f9543f51395611))
+
 # [1.1.0](https://github.com/gravitee-io/gravitee-plugin-common-configurations/compare/1.0.0...1.1.0) (2026-01-21)
 
 
