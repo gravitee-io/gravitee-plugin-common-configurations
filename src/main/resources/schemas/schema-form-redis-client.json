@@ -1,0 +1,249 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "gioClass": "io.gravitee.plugin.configurations.redis.RedisClientOptions",
+    "gioExternalDefinitions": {
+        "redisClientOptions": {
+            "type": "object",
+            "javaType": "io.gravitee.plugin.configurations.redis.RedisClientOptions",
+            "title": "Redis connection",
+            "properties": {
+                "host": {
+                    "$ref": "#/gioExternalDefinitions/redisHost"
+                },
+                "port": {
+                    "$ref": "#/gioExternalDefinitions/redisPort"
+                },
+                "username": {
+                    "$ref": "#/gioExternalDefinitions/redisUsername"
+                },
+                "password": {
+                    "$ref": "#/gioExternalDefinitions/redisPassword"
+                },
+                "useSsl": {
+                    "$ref": "#/gioExternalDefinitions/redisUseSsl"
+                },
+                "ssl": {
+                    "$ref": "schema-form-ssl.json#/gioExternalDefinitions/sslOptions"
+                },
+                "sentinel": {
+                    "$ref": "#/gioExternalDefinitions/redisSentinel"
+                },
+                "maxPoolSize": {
+                    "$ref": "#/gioExternalDefinitions/redisMaxPoolSize"
+                },
+                "maxPoolWaiting": {
+                    "$ref": "#/gioExternalDefinitions/redisMaxPoolWaiting"
+                },
+                "poolCleanerInterval": {
+                    "$ref": "#/gioExternalDefinitions/redisPoolCleanerInterval"
+                },
+                "poolRecycleTimeout": {
+                    "$ref": "#/gioExternalDefinitions/redisPoolRecycleTimeout"
+                },
+                "maxWaitingHandlers": {
+                    "$ref": "#/gioExternalDefinitions/redisMaxWaitingHandlers"
+                },
+                "connectTimeout": {
+                    "$ref": "#/gioExternalDefinitions/redisConnectTimeout"
+                },
+                "idleTimeout": {
+                    "$ref": "#/gioExternalDefinitions/redisIdleTimeout"
+                }
+            }
+        },
+        "redisHost": {
+            "title": "Host",
+            "description": "The host of the Redis instance. (Supports EL)",
+            "type": "string",
+            "default": "localhost",
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "redisPort": {
+            "title": "Port",
+            "description": "The port of the Redis instance. (Supports EL)",
+            "type": "integer",
+            "default": 6379,
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "redisUsername": {
+            "title": "Username",
+            "description": "The username for Redis ACL authentication. (Supports EL and secrets)",
+            "type": "string",
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "redisPassword": {
+            "title": "Password",
+            "description": "The password of the Redis instance. (Supports EL and secrets)",
+            "type": "string",
+            "writeOnly": true,
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "redisUseSsl": {
+            "title": "Use SSL",
+            "description": "Use SSL connections to Redis.",
+            "type": "boolean",
+            "default": false
+        },
+        "redisSentinel": {
+            "type": "object",
+            "title": "Sentinel",
+            "oneOf": [
+                {
+                    "title": "Sentinel disabled",
+                    "description": "Sentinel provides high availability for Redis.",
+                    "properties": {
+                        "enabled": {
+                            "const": false
+                        }
+                    }
+                },
+                {
+                    "title": "Configure sentinel",
+                    "properties": {
+                        "enabled": {
+                            "const": true
+                        },
+                        "masterId": {
+                            "$ref": "#/gioExternalDefinitions/redisSentinelMasterId"
+                        },
+                        "password": {
+                            "$ref": "#/gioExternalDefinitions/redisSentinelPassword"
+                        },
+                        "nodes": {
+                            "$ref": "#/gioExternalDefinitions/redisSentinelNodes"
+                        }
+                    },
+                    "required": ["masterId", "nodes"]
+                }
+            ],
+            "default": {
+                "enabled": false
+            }
+        },
+        "redisSentinelMasterId": {
+            "title": "Master",
+            "description": "The sentinel master id. (Supports EL)",
+            "type": "string",
+            "default": "sentinel-master",
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "redisSentinelPassword": {
+            "title": "Sentinel password",
+            "description": "The sentinel password. (Supports EL and secrets)",
+            "type": "string",
+            "writeOnly": true,
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "redisMaxPoolSize": {
+            "title": "Max pool size",
+            "description": "Maximum number of connections in the pool. (Supports EL)",
+            "type": "integer",
+            "default": 6,
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "redisMaxPoolWaiting": {
+            "title": "Max pool waiting",
+            "description": "Maximum number of requests waiting for a connection from the pool. (Supports EL)",
+            "type": "integer",
+            "default": 1024,
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "redisPoolCleanerInterval": {
+            "title": "Pool cleaner interval (ms)",
+            "description": "Interval in milliseconds between pool cleaner runs. (Supports EL)",
+            "type": "integer",
+            "default": 30000,
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "redisPoolRecycleTimeout": {
+            "title": "Pool recycle timeout (ms)",
+            "description": "Timeout in milliseconds for recycling idle connections. (Supports EL)",
+            "type": "integer",
+            "default": 180000,
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "redisMaxWaitingHandlers": {
+            "title": "Max waiting handlers",
+            "description": "Maximum number of waiting handlers for the Redis client. (Supports EL)",
+            "type": "integer",
+            "default": 1024,
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "redisConnectTimeout": {
+            "title": "Connect timeout (ms)",
+            "description": "Maximum time in milliseconds to establish a connection. (Supports EL)",
+            "type": "integer",
+            "default": 2000,
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "redisIdleTimeout": {
+            "title": "Idle timeout (ms)",
+            "description": "Time in milliseconds after which an idle connection is closed. 0 disables the idle timeout. (Supports EL)",
+            "type": "integer",
+            "default": 0,
+            "gioConfig": {
+                "el": true
+            }
+        },
+        "redisSentinelNodes": {
+            "type": "array",
+            "title": "Sentinel nodes",
+            "items": {
+                "type": "object",
+                "title": "Node",
+                "properties": {
+                    "host": {
+                        "title": "The host of node",
+                        "description": "(Supports EL)",
+                        "type": "string",
+                        "default": "localhost",
+                        "gioConfig": {
+                            "el": true
+                        }
+                    },
+                    "port": {
+                        "title": "The port of node",
+                        "description": "(Supports EL)",
+                        "type": "integer",
+                        "default": 26379,
+                        "gioConfig": {
+                            "el": true
+                        }
+                    }
+                },
+                "required": ["host", "port"]
+            },
+            "default": [
+                {
+                    "host": "localhost",
+                    "port": 26379
+                }
+            ]
+        }
+    }
+}
