@@ -38,7 +38,7 @@ public class RedisSentinelOptions implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Builder.Default
-    private boolean enabled = false;
+    private boolean enabled = true;
 
     private String masterId;
 

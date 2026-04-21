@@ -122,11 +122,12 @@ class RedisClientOptionsMapperTest {
 
         @Test
         void should_build_sentinel_redis_options() {
+            // No explicit .enabled(true) — default is true, preserves 1.1.0 behavior
+            // where callers activated sentinel mode by just providing nodes + masterId.
             var options = RedisClientOptions.builder()
                 .password("redis-pass")
                 .sentinel(
                     RedisSentinelOptions.builder()
-                        .enabled(true)
                         .masterId("mymaster")
                         .password("sentinel-pass")
                         .nodes(
@@ -163,7 +164,6 @@ class RedisClientOptionsMapperTest {
                 .useSsl(true)
                 .sentinel(
                     RedisSentinelOptions.builder()
-                        .enabled(true)
                         .masterId("mymaster")
                         .nodes(List.of(HostAndPort.builder().host("sentinel1").port(26379).build()))
                         .build()
@@ -184,7 +184,6 @@ class RedisClientOptionsMapperTest {
                 .password("redis-pass")
                 .sentinel(
                     RedisSentinelOptions.builder()
-                        .enabled(true)
                         .masterId("mymaster")
                         .nodes(List.of(HostAndPort.builder().host("sentinel1").port(26379).build()))
                         .build()
@@ -194,6 +193,26 @@ class RedisClientOptionsMapperTest {
             var result = RedisClientOptionsMapper.INSTANCE.map(options);
 
             assertThat(result.getEndpoints()).containsExactly("redis://:redis-pass@sentinel1:26379");
+        }
+
+        @Test
+        void should_fall_back_to_standalone_when_sentinel_explicitly_disabled() {
+            var options = RedisClientOptions.builder()
+                .host("redis.example.com")
+                .port(6380)
+                .sentinel(
+                    RedisSentinelOptions.builder()
+                        .enabled(false)
+                        .masterId("mymaster")
+                        .nodes(List.of(HostAndPort.builder().host("sentinel1").port(26379).build()))
+                        .build()
+                )
+                .build();
+
+            var result = RedisClientOptionsMapper.INSTANCE.map(options);
+
+            assertThat(result.getType()).isEqualTo(RedisClientType.STANDALONE);
+            assertThat(result.getEndpoints()).containsExactly("redis://redis.example.com:6380");
         }
     }
 
