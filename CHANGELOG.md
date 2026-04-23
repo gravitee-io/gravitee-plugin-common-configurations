@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/gravitee-io/gravitee-plugin-common-configurations/compare/1.2.1...1.2.2) (2026-04-23)
+
+
+### Bug Fixes
+
+* **ssl:** expose tlsProtocols, tlsCiphers, alpn, openSsl on SslOptions ([#19](https://github.com/gravitee-io/gravitee-plugin-common-configurations/issues/19)) ([9036918](https://github.com/gravitee-io/gravitee-plugin-common-configurations/commit/90369183686bec2d7e0d13c463e0f8f93427ae06))
+
 ## [1.2.1](https://github.com/gravitee-io/gravitee-plugin-common-configurations/compare/1.2.0...1.2.1) (2026-04-21)
 
 
