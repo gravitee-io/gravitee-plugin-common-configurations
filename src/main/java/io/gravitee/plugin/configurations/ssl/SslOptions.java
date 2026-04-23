@@ -17,6 +17,8 @@ package io.gravitee.plugin.configurations.ssl;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -43,6 +45,16 @@ public class SslOptions implements Serializable {
 
     @Builder.Default
     private boolean hostnameVerifier = true;
+
+    @Builder.Default
+    private boolean openSsl = false;
+
+    @Builder.Default
+    private boolean alpn = false;
+
+    private Set<String> tlsProtocols;
+
+    private List<String> tlsCiphers;
 
     private TrustStore trustStore;
 
