@@ -46,6 +46,15 @@ public class SslOptions implements Serializable {
     @Builder.Default
     private boolean hostnameVerifier = true;
 
+    /**
+     * Hostname verification algorithm passed to the underlying TLS engine
+     * (e.g. {@code HTTPS}, {@code LDAPS}). When {@code null} or {@code "NONE"},
+     * the {@link #hostnameVerifier} boolean is the source of truth and
+     * {@code HTTPS} is applied if it's true. Set this field when callers need
+     * a specific algorithm string ({@code LDAPS} in particular).
+     */
+    private String hostnameVerificationAlgorithm;
+
     @Builder.Default
     private boolean openSsl = false;
 

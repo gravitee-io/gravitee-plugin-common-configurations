@@ -16,6 +16,7 @@
 package io.gravitee.plugin.mappers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 
 import io.gravitee.node.vertx.client.ssl.KeyStore;
@@ -54,6 +55,14 @@ class SslOptionsMapperTest {
         assertThat(result.keyStore()).isEmpty();
     }
 
+    @Test
+    void should_map_hostnameVerificationAlgorithm() {
+        final SslOptions sslOptions = SslOptions.builder().hostnameVerificationAlgorithm("LDAPS").build();
+
+        final var result = SslOptionsMapper.INSTANCE.map(sslOptions);
+        assertThat(result.getHostnameVerificationAlgorithm()).isEqualTo("LDAPS");
+    }
+
     @Nested
     class PEM {
 
@@ -79,6 +88,68 @@ class SslOptionsMapperTest {
                 assertThat(resultPEMKeyStore.getCertPath()).isEqualTo("certPath");
                 assertThat(resultPEMKeyStore.getCertContent()).isEqualTo("certContent");
             });
+        }
+
+        @Test
+        void should_map_pem_keyStore_with_multiple_certs() {
+            final SslOptions sslOptions = SslOptions.builder()
+                .trustAll(false)
+                .keyStore(
+                    PEMKeyStore.builder()
+                        .certPaths(java.util.List.of("cert1.pem", "cert2.pem"))
+                        .keyPaths(java.util.List.of("key1.pem", "key2.pem"))
+                        .build()
+                )
+                .build();
+            final var result = SslOptionsMapper.INSTANCE.map(sslOptions);
+            assertThat(result.keyStore()).hasValueSatisfying(resultKeystore -> {
+                final var resultPEMKeyStore = castInto(resultKeystore, io.gravitee.node.vertx.client.ssl.pem.PEMKeyStore.class);
+                assertThat(resultPEMKeyStore.getCertPaths()).containsExactly("cert1.pem", "cert2.pem");
+                assertThat(resultPEMKeyStore.getKeyPaths()).containsExactly("key1.pem", "key2.pem");
+            });
+        }
+
+        @Test
+        void should_forward_both_singular_and_list_fields_unchanged() {
+            // The mapper is a dumb forwarder: it does not pick a winner between the
+            // singular keyPath/certPath and the list keyPaths/certPaths fields. Precedence
+            // (lists win when populated) is enforced by the consumer in node-vertx, not here.
+            // This test locks down the "forward all four fields verbatim" contract.
+            final SslOptions sslOptions = SslOptions.builder()
+                .trustAll(false)
+                .keyStore(
+                    PEMKeyStore.builder()
+                        .keyPath("singularKeyPath")
+                        .certPath("singularCertPath")
+                        .certPaths(java.util.List.of("cert1.pem", "cert2.pem"))
+                        .keyPaths(java.util.List.of("key1.pem", "key2.pem"))
+                        .build()
+                )
+                .build();
+            final var result = SslOptionsMapper.INSTANCE.map(sslOptions);
+            assertThat(result.keyStore()).hasValueSatisfying(resultKeystore -> {
+                final var resultPEMKeyStore = castInto(resultKeystore, io.gravitee.node.vertx.client.ssl.pem.PEMKeyStore.class);
+                assertThat(resultPEMKeyStore.getKeyPath()).isEqualTo("singularKeyPath");
+                assertThat(resultPEMKeyStore.getCertPath()).isEqualTo("singularCertPath");
+                assertThat(resultPEMKeyStore.getCertPaths()).containsExactly("cert1.pem", "cert2.pem");
+                assertThat(resultPEMKeyStore.getKeyPaths()).containsExactly("key1.pem", "key2.pem");
+            });
+        }
+
+        @Test
+        void should_reject_mismatched_certPaths_and_keyPaths_sizes() {
+            assertThatThrownBy(() ->
+                PEMKeyStore.builder().certPaths(java.util.List.of("c1.pem", "c2.pem")).keyPaths(java.util.List.of("k1.pem")).build()
+            )
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("certPaths and keyPaths must be the same size");
+        }
+
+        @Test
+        void should_reject_certPaths_without_keyPaths() {
+            assertThatThrownBy(() -> PEMKeyStore.builder().certPaths(java.util.List.of("c1.pem")).build())
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("must both be set or both null");
         }
 
         @Test
