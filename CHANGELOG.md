@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/gravitee-io/gravitee-plugin-common-configurations/compare/1.2.2...1.2.3) (2026-05-04)
+
+
+### Bug Fixes
+
+* **ssl:** align None trustStore/keyStore const with Java enum value ([450a347](https://github.com/gravitee-io/gravitee-plugin-common-configurations/commit/450a347265d3fcffcdb00bc7807db61b39f3c417))
+
 ## [1.2.2](https://github.com/gravitee-io/gravitee-plugin-common-configurations/compare/1.2.1...1.2.2) (2026-04-23)
 
 
