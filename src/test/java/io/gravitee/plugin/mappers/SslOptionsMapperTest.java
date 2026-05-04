@@ -54,6 +54,14 @@ class SslOptionsMapperTest {
         assertThat(result.keyStore()).isEmpty();
     }
 
+    @Test
+    void should_map_hostnameVerificationAlgorithm() {
+        final SslOptions sslOptions = SslOptions.builder().hostnameVerificationAlgorithm("LDAPS").build();
+
+        final var result = SslOptionsMapper.INSTANCE.map(sslOptions);
+        assertThat(result.getHostnameVerificationAlgorithm()).isEqualTo("LDAPS");
+    }
+
     @Nested
     class PEM {
 
@@ -78,6 +86,25 @@ class SslOptionsMapperTest {
                 assertThat(resultPEMKeyStore.getKeyContent()).isEqualTo("keyContent");
                 assertThat(resultPEMKeyStore.getCertPath()).isEqualTo("certPath");
                 assertThat(resultPEMKeyStore.getCertContent()).isEqualTo("certContent");
+            });
+        }
+
+        @Test
+        void should_map_pem_keyStore_with_multiple_certs() {
+            final SslOptions sslOptions = SslOptions.builder()
+                .trustAll(false)
+                .keyStore(
+                    PEMKeyStore.builder()
+                        .certPaths(java.util.List.of("cert1.pem", "cert2.pem"))
+                        .keyPaths(java.util.List.of("key1.pem", "key2.pem"))
+                        .build()
+                )
+                .build();
+            final var result = SslOptionsMapper.INSTANCE.map(sslOptions);
+            assertThat(result.keyStore()).hasValueSatisfying(resultKeystore -> {
+                final var resultPEMKeyStore = castInto(resultKeystore, io.gravitee.node.vertx.client.ssl.pem.PEMKeyStore.class);
+                assertThat(resultPEMKeyStore.getCertPaths()).containsExactly("cert1.pem", "cert2.pem");
+                assertThat(resultPEMKeyStore.getKeyPaths()).containsExactly("key1.pem", "key2.pem");
             });
         }
 
