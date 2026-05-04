@@ -23,7 +23,7 @@
                             "title": "None",
                             "properties": {
                                 "type": {
-                                    "const": ""
+                                    "const": "NONE"
                                 }
                             }
                         },
@@ -129,7 +129,7 @@
                             "title": "None",
                             "properties": {
                                 "type": {
-                                    "const": ""
+                                    "const": "NONE"
                                 }
                             }
                         },
