@@ -51,6 +51,7 @@ class SslOptionsMapperTest {
         final io.gravitee.node.vertx.client.ssl.SslOptions result = SslOptionsMapper.INSTANCE.map(sslOptions);
         assertThat(result.isTrustAll()).isFalse();
         assertThat(result.isHostnameVerifier()).isTrue();
+        assertThat(result.getHostnameVerificationAlgorithm()).isNull();
         assertThat(result.trustStore()).isEmpty();
         assertThat(result.keyStore()).isEmpty();
     }
@@ -61,6 +62,17 @@ class SslOptionsMapperTest {
 
         final var result = SslOptionsMapper.INSTANCE.map(sslOptions);
         assertThat(result.getHostnameVerificationAlgorithm()).isEqualTo("LDAPS");
+    }
+
+    @Test
+    void should_forward_NONE_hostnameVerificationAlgorithm_verbatim() {
+        // The mapper is a dumb forwarder. The "null or NONE → fall back to the
+        // hostnameVerifier boolean" semantics live in the consuming layer
+        // (node-vertx), not here. This test pins that behavior at this layer.
+        final SslOptions sslOptions = SslOptions.builder().hostnameVerificationAlgorithm("NONE").build();
+
+        final var result = SslOptionsMapper.INSTANCE.map(sslOptions);
+        assertThat(result.getHostnameVerificationAlgorithm()).isEqualTo("NONE");
     }
 
     @Nested
@@ -103,6 +115,7 @@ class SslOptionsMapperTest {
                 .build();
             final var result = SslOptionsMapper.INSTANCE.map(sslOptions);
             assertThat(result.keyStore()).hasValueSatisfying(resultKeystore -> {
+                assertThat(resultKeystore.getType()).isEqualTo(KeyStoreType.PEM);
                 final var resultPEMKeyStore = castInto(resultKeystore, io.gravitee.node.vertx.client.ssl.pem.PEMKeyStore.class);
                 assertThat(resultPEMKeyStore.getCertPaths()).containsExactly("cert1.pem", "cert2.pem");
                 assertThat(resultPEMKeyStore.getKeyPaths()).containsExactly("key1.pem", "key2.pem");

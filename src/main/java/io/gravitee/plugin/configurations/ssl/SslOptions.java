@@ -47,11 +47,12 @@ public class SslOptions implements Serializable {
     private boolean hostnameVerifier = true;
 
     /**
-     * Hostname verification algorithm passed to the underlying TLS engine
-     * (e.g. {@code HTTPS}, {@code LDAPS}). When {@code null} or {@code "NONE"},
-     * the {@link #hostnameVerifier} boolean is the source of truth and
-     * {@code HTTPS} is applied if it's true. Set this field when callers need
-     * a specific algorithm string ({@code LDAPS} in particular).
+     * Hostname verification algorithm passed verbatim to the consuming layer
+     * (e.g. {@code HTTPS}, {@code LDAPS}). The "{@code null} or {@code "NONE"} →
+     * fall back to the {@link #hostnameVerifier} boolean (applying {@code HTTPS}
+     * when {@code true})" rule is interpreted in the consuming layer (node-vertx),
+     * not in the mapper. Set this field when callers need a specific algorithm
+     * string ({@code LDAPS} in particular).
      */
     private String hostnameVerificationAlgorithm;
 
