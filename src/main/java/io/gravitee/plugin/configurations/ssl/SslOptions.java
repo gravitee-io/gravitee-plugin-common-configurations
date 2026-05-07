@@ -46,6 +46,16 @@ public class SslOptions implements Serializable {
     @Builder.Default
     private boolean hostnameVerifier = true;
 
+    /**
+     * Hostname verification algorithm passed verbatim to the consuming layer
+     * (e.g. {@code HTTPS}, {@code LDAPS}). The "{@code null} or {@code "NONE"} →
+     * fall back to the {@link #hostnameVerifier} boolean (applying {@code HTTPS}
+     * when {@code true})" rule is interpreted in the consuming layer (node-vertx),
+     * not in the mapper. Set this field when callers need a specific algorithm
+     * string ({@code LDAPS} in particular).
+     */
+    private String hostnameVerificationAlgorithm;
+
     @Builder.Default
     private boolean openSsl = false;
 
