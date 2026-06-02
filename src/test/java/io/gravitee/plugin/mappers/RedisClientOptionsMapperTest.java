@@ -16,11 +16,14 @@
 package io.gravitee.plugin.mappers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import io.gravitee.plugin.configurations.redis.HostAndPort;
 import io.gravitee.plugin.configurations.redis.RedisClientOptions;
+import io.gravitee.plugin.configurations.redis.RedisClusterOptions;
 import io.gravitee.plugin.configurations.redis.RedisSentinelOptions;
 import io.vertx.redis.client.RedisClientType;
+import io.vertx.redis.client.RedisReplicas;
 import io.vertx.redis.client.RedisRole;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -205,6 +208,120 @@ class RedisClientOptionsMapperTest {
                         .enabled(false)
                         .masterId("mymaster")
                         .nodes(List.of(HostAndPort.builder().host("sentinel1").port(26379).build()))
+                        .build()
+                )
+                .build();
+
+            var result = RedisClientOptionsMapper.INSTANCE.map(options);
+
+            assertThat(result.getType()).isEqualTo(RedisClientType.STANDALONE);
+            assertThat(result.getEndpoints()).containsExactly("redis://redis.example.com:6380");
+        }
+    }
+
+    @Nested
+    class Cluster {
+
+        @Test
+        void should_build_cluster_redis_options_with_endpoint_per_node() {
+            var options = RedisClientOptions.builder()
+                .cluster(
+                    RedisClusterOptions.builder()
+                        .nodes(
+                            List.of(
+                                HostAndPort.builder().host("redis1").port(6379).build(),
+                                HostAndPort.builder().host("redis2").port(6379).build(),
+                                HostAndPort.builder().host("redis3").port(6379).build()
+                            )
+                        )
+                        .build()
+                )
+                .build();
+
+            var result = RedisClientOptionsMapper.INSTANCE.map(options);
+
+            assertThat(result.getType()).isEqualTo(RedisClientType.CLUSTER);
+            assertThat(result.getEndpoints()).containsExactly("redis://redis1:6379", "redis://redis2:6379", "redis://redis3:6379");
+        }
+
+        @Test
+        void should_embed_credentials_and_ssl_in_each_cluster_node_uri() {
+            var options = RedisClientOptions.builder()
+                .username("admin")
+                .password("secret")
+                .useSsl(true)
+                .cluster(
+                    RedisClusterOptions.builder()
+                        .nodes(
+                            List.of(
+                                HostAndPort.builder().host("redis1").port(6379).build(),
+                                HostAndPort.builder().host("redis2").port(6379).build()
+                            )
+                        )
+                        .build()
+                )
+                .build();
+
+            var result = RedisClientOptionsMapper.INSTANCE.map(options);
+
+            // Unlike sentinel, cluster nodes carry the top-level username too (uniform auth across nodes).
+            assertThat(result.getEndpoints()).containsExactly("rediss://admin:secret@redis1:6379", "rediss://admin:secret@redis2:6379");
+        }
+
+        @Test
+        void should_default_use_replicas_to_never() {
+            var options = RedisClientOptions.builder()
+                .cluster(RedisClusterOptions.builder().nodes(List.of(HostAndPort.builder().host("redis1").port(6379).build())).build())
+                .build();
+
+            var result = RedisClientOptionsMapper.INSTANCE.map(options);
+
+            assertThat(result.getUseReplicas()).isEqualTo(RedisReplicas.NEVER);
+        }
+
+        @Test
+        void should_honor_configured_use_replicas() {
+            var options = RedisClientOptions.builder()
+                .cluster(
+                    RedisClusterOptions.builder()
+                        .useReplicas("SHARE")
+                        .nodes(List.of(HostAndPort.builder().host("redis1").port(6379).build()))
+                        .build()
+                )
+                .build();
+
+            var result = RedisClientOptionsMapper.INSTANCE.map(options);
+
+            assertThat(result.getUseReplicas()).isEqualTo(RedisReplicas.SHARE);
+        }
+
+        @Test
+        void should_fail_fast_when_cluster_and_sentinel_both_enabled() {
+            var options = RedisClientOptions.builder()
+                .cluster(RedisClusterOptions.builder().nodes(List.of(HostAndPort.builder().host("redis1").port(6379).build())).build())
+                .sentinel(
+                    RedisSentinelOptions.builder()
+                        .masterId("mymaster")
+                        .nodes(List.of(HostAndPort.builder().host("sentinel1").port(26379).build()))
+                        .build()
+                )
+                .build();
+
+            assertThatThrownBy(() -> RedisClientOptionsMapper.INSTANCE.map(options))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("cluster")
+                .hasMessageContaining("sentinel");
+        }
+
+        @Test
+        void should_fall_back_to_standalone_when_cluster_explicitly_disabled() {
+            var options = RedisClientOptions.builder()
+                .host("redis.example.com")
+                .port(6380)
+                .cluster(
+                    RedisClusterOptions.builder()
+                        .enabled(false)
+                        .nodes(List.of(HostAndPort.builder().host("redis1").port(6379).build()))
                         .build()
                 )
                 .build();

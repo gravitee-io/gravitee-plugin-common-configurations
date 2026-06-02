@@ -19,6 +19,7 @@ import io.gravitee.plugin.configurations.redis.HostAndPort;
 import io.gravitee.plugin.configurations.redis.RedisClientOptions;
 import io.vertx.redis.client.RedisClientType;
 import io.vertx.redis.client.RedisOptions;
+import io.vertx.redis.client.RedisReplicas;
 import io.vertx.redis.client.RedisRole;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -67,7 +68,15 @@ public abstract class RedisClientOptionsMapper {
 
     @AfterMapping
     protected void afterMapping(RedisClientOptions source, @MappingTarget RedisOptions target) {
-        if (isSentinelMode(source)) {
+        if (isClusterMode(source) && isSentinelMode(source)) {
+            throw new IllegalArgumentException(
+                "Invalid Redis configuration: cluster and sentinel modes are mutually exclusive — enable only one."
+            );
+        }
+
+        if (isClusterMode(source)) {
+            configureCluster(target, source);
+        } else if (isSentinelMode(source)) {
             configureSentinel(target, source);
         } else {
             configureStandalone(target, source);
@@ -80,9 +89,24 @@ public abstract class RedisClientOptionsMapper {
             .setIdleTimeoutUnit(TimeUnit.MILLISECONDS);
     }
 
+    private boolean isClusterMode(RedisClientOptions options) {
+        var cluster = options.getCluster();
+        return cluster != null && cluster.isEnabled() && !cluster.getNodes().isEmpty();
+    }
+
     private boolean isSentinelMode(RedisClientOptions options) {
         var sentinel = options.getSentinel();
         return sentinel != null && sentinel.isEnabled() && !sentinel.getNodes().isEmpty();
+    }
+
+    private void configureCluster(RedisOptions redisOptions, RedisClientOptions options) {
+        redisOptions.setType(RedisClientType.CLUSTER);
+        redisOptions.setUseReplicas(RedisReplicas.valueOf(options.getCluster().getUseReplicas()));
+        for (HostAndPort node : options.getCluster().getNodes()) {
+            redisOptions.addConnectionString(
+                buildConnectionString(node.getHost(), node.getPort(), options.getUsername(), options.getPassword(), options.isUseSsl())
+            );
+        }
     }
 
     private void configureSentinel(RedisOptions redisOptions, RedisClientOptions options) {
