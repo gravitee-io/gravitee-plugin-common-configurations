@@ -64,6 +64,8 @@ public class RedisClientOptions implements Serializable {
 
     private RedisSentinelOptions sentinel;
 
+    private RedisClusterOptions cluster;
+
     @Builder.Default
     private int maxPoolSize = DEFAULT_MAX_POOL_SIZE;
 
