@@ -23,6 +23,7 @@ import io.vertx.redis.client.RedisReplicas;
 import io.vertx.redis.client.RedisRole;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -39,7 +40,9 @@ import org.mapstruct.factory.Mappers;
  * in the connection string (userinfo), URL-encoded. In sentinel mode the top-level
  * password is embedded in each sentinel URI (applied to the master after discovery) and
  * {@code sentinel.password} is set globally on {@link RedisOptions} for the sentinel-node
- * AUTH.
+ * AUTH. In cluster mode the top-level {@code username} and {@code password} are embedded in
+ * every node URI (uniform auth across all cluster nodes), and {@code cluster.useReplicas}
+ * selects the read-from-replica policy.
  *
  * <p>SSL configuration is intentionally left to the caller: callers in
  * {@code gravitee-node-vertx} (e.g. {@code VertxRedisClientFactory}) apply SSL using the
@@ -94,6 +97,19 @@ public abstract class RedisClientOptionsMapper {
         return cluster != null && cluster.isEnabled() && !cluster.getNodes().isEmpty();
     }
 
+    private static RedisReplicas parseUseReplicas(String value) {
+        if (value == null || value.isBlank()) {
+            return RedisReplicas.NEVER;
+        }
+        try {
+            return RedisReplicas.valueOf(value.trim().toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(
+                "Invalid Redis cluster 'useReplicas' value '" + value + "'. Allowed values: NEVER, SHARE, ALWAYS."
+            );
+        }
+    }
+
     private boolean isSentinelMode(RedisClientOptions options) {
         var sentinel = options.getSentinel();
         return sentinel != null && sentinel.isEnabled() && !sentinel.getNodes().isEmpty();
@@ -101,7 +117,7 @@ public abstract class RedisClientOptionsMapper {
 
     private void configureCluster(RedisOptions redisOptions, RedisClientOptions options) {
         redisOptions.setType(RedisClientType.CLUSTER);
-        redisOptions.setUseReplicas(RedisReplicas.valueOf(options.getCluster().getUseReplicas()));
+        redisOptions.setUseReplicas(parseUseReplicas(options.getCluster().getUseReplicas()));
         for (HostAndPort node : options.getCluster().getNodes()) {
             redisOptions.addConnectionString(
                 buildConnectionString(node.getHost(), node.getPort(), options.getUsername(), options.getPassword(), options.isUseSsl())

@@ -296,6 +296,39 @@ class RedisClientOptionsMapperTest {
         }
 
         @Test
+        void should_accept_use_replicas_case_insensitively() {
+            var options = RedisClientOptions.builder()
+                .cluster(
+                    RedisClusterOptions.builder()
+                        .useReplicas("share")
+                        .nodes(List.of(HostAndPort.builder().host("redis1").port(6379).build()))
+                        .build()
+                )
+                .build();
+
+            var result = RedisClientOptionsMapper.INSTANCE.map(options);
+
+            assertThat(result.getUseReplicas()).isEqualTo(RedisReplicas.SHARE);
+        }
+
+        @Test
+        void should_reject_invalid_use_replicas_with_a_clear_message() {
+            var options = RedisClientOptions.builder()
+                .cluster(
+                    RedisClusterOptions.builder()
+                        .useReplicas("replica")
+                        .nodes(List.of(HostAndPort.builder().host("redis1").port(6379).build()))
+                        .build()
+                )
+                .build();
+
+            assertThatThrownBy(() -> RedisClientOptionsMapper.INSTANCE.map(options))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("useReplicas")
+                .hasMessageContaining("NEVER, SHARE, ALWAYS");
+        }
+
+        @Test
         void should_fail_fast_when_cluster_and_sentinel_both_enabled() {
             var options = RedisClientOptions.builder()
                 .cluster(RedisClusterOptions.builder().nodes(List.of(HostAndPort.builder().host("redis1").port(6379).build())).build())
