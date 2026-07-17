@@ -46,6 +46,12 @@
                         },
                         "maxConcurrentConnections": {
                             "$ref": "#/gioExternalDefinitions/maxConcurrentConnections"
+                        },
+                        "maxWaitQueueSize": {
+                            "$ref": "#/gioExternalDefinitions/maxWaitQueueSize"
+                        },
+                        "maxConnectionLifetime": {
+                            "$ref": "#/gioExternalDefinitions/maxConnectionLifetime"
                         }
                     },
                     "required": ["connectTimeout", "readTimeout", "idleTimeout", "maxConcurrentConnections"],
@@ -92,6 +98,12 @@
                         },
                         "maxConcurrentConnections": {
                             "$ref": "#/gioExternalDefinitions/maxConcurrentConnections"
+                        },
+                        "maxWaitQueueSize": {
+                            "$ref": "#/gioExternalDefinitions/maxWaitQueueSize"
+                        },
+                        "maxConnectionLifetime": {
+                            "$ref": "#/gioExternalDefinitions/maxConnectionLifetime"
                         },
                         "http2MultiplexingLimit": {
                             "$ref": "#/gioExternalDefinitions/http2MultiplexingLimit"
@@ -238,6 +250,30 @@
             "title": "Max Concurrent Connections",
             "description": "Maximum pool size for connections.",
             "default": 20
+        },
+        "maxWaitQueueSize": {
+            "type": "integer",
+            "title": "Max wait queue size",
+            "default": -1,
+            "minimum": -1,
+            "gioConfig": {
+                "banner": {
+                    "title": "Max wait queue size",
+                    "text": "Maximum number of requests allowed to wait in the pending queue once the connection pool is full. If set to -1, the queue is unbounded (default). If set to 0, a request is rejected as soon as the pool is full. Any positive value bounds the queue, letting the gateway fail fast under overload."
+                }
+            }
+        },
+        "maxConnectionLifetime": {
+            "type": "integer",
+            "title": "Max connection lifetime (ms)",
+            "default": 0,
+            "minimum": 0,
+            "gioConfig": {
+                "banner": {
+                    "title": "Max connection lifetime (ms)",
+                    "text": "Maximum lifetime of a pooled connection in milliseconds, after which it is recycled even if still usable. If set to 0, connections have no maximum lifetime (default). A positive value lets the gateway periodically recycle long-lived keep-alive connections so traffic rebalances when the set of upstream instances changes."
+                }
+            }
         },
         "http2MultiplexingLimit": {
             "type": "integer",
