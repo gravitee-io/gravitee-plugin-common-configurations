@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/gravitee-io/gravitee-plugin-common-configurations/compare/1.4.0...1.5.0) (2026-07-17)
+
+
+### Features
+
+* add configurable connection pool max wait queue size and max connection lifetime ([#27](https://github.com/gravitee-io/gravitee-plugin-common-configurations/issues/27)) ([f444bb2](https://github.com/gravitee-io/gravitee-plugin-common-configurations/commit/f444bb228e51b119d1bf3ac528f20d9b2d2270c2))
+
 # [1.4.0](https://github.com/gravitee-io/gravitee-plugin-common-configurations/compare/1.3.0...1.4.0) (2026-06-03)
 
 
