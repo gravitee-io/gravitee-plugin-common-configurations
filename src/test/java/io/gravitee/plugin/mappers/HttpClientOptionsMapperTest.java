@@ -49,6 +49,24 @@ class HttpClientOptionsMapperTest {
     }
 
     @Test
+    void should_map_pool_defaults_to_unbounded_queue_and_no_lifetime() {
+        final HttpClientOptions httpClientOptions = HttpClientOptions.builder().build();
+
+        final VertxHttpClientOptions result = HttpClientOptionsMapper.INSTANCE.map(httpClientOptions);
+        assertThat(result.getMaxWaitQueueSize()).isEqualTo(VertxHttpClientOptions.DEFAULT_MAX_WAIT_QUEUE_SIZE);
+        assertThat(result.getMaxConnectionLifetime()).isEqualTo(VertxHttpClientOptions.DEFAULT_MAX_CONNECTION_LIFETIME);
+    }
+
+    @Test
+    void should_map_defined_pool_wait_queue_and_lifetime() {
+        final HttpClientOptions httpClientOptions = HttpClientOptions.builder().maxWaitQueueSize(50).maxConnectionLifetime(120000).build();
+
+        final VertxHttpClientOptions result = HttpClientOptionsMapper.INSTANCE.map(httpClientOptions);
+        assertThat(result.getMaxWaitQueueSize()).isEqualTo(50);
+        assertThat(result.getMaxConnectionLifetime()).isEqualTo(120000);
+    }
+
+    @Test
     void should_build_http_client_options_with_defined_values() {
         final HttpClientOptions httpClientOptions = HttpClientOptions.builder()
             .connectTimeout(1000)
