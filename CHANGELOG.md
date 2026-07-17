@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/gravitee-io/gravitee-plugin-common-configurations/compare/1.5.0...1.5.1) (2026-07-17)
+
+
+### Bug Fixes
+
+* resolve explicit null maxWaitQueueSize to unbounded (-1) like absent ([#31](https://github.com/gravitee-io/gravitee-plugin-common-configurations/issues/31)) ([0dace2b](https://github.com/gravitee-io/gravitee-plugin-common-configurations/commit/0dace2bf5a756e57f69fea86f98c64a26f04a1b1))
+
 # [1.5.0](https://github.com/gravitee-io/gravitee-plugin-common-configurations/compare/1.4.0...1.5.0) (2026-07-17)
 
 
