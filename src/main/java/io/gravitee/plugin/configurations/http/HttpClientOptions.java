@@ -22,7 +22,9 @@ import static io.gravitee.node.vertx.client.http.VertxHttpClientOptions.DEFAULT_
 import static io.gravitee.node.vertx.client.http.VertxHttpClientOptions.DEFAULT_KEEP_ALIVE;
 import static io.gravitee.node.vertx.client.http.VertxHttpClientOptions.DEFAULT_KEEP_ALIVE_TIMEOUT;
 import static io.gravitee.node.vertx.client.http.VertxHttpClientOptions.DEFAULT_MAX_CONCURRENT_CONNECTIONS;
+import static io.gravitee.node.vertx.client.http.VertxHttpClientOptions.DEFAULT_MAX_CONNECTION_LIFETIME;
 import static io.gravitee.node.vertx.client.http.VertxHttpClientOptions.DEFAULT_MAX_FRAME_SIZE;
+import static io.gravitee.node.vertx.client.http.VertxHttpClientOptions.DEFAULT_MAX_WAIT_QUEUE_SIZE;
 import static io.gravitee.node.vertx.client.http.VertxHttpClientOptions.DEFAULT_PIPELINING;
 import static io.gravitee.node.vertx.client.http.VertxHttpClientOptions.DEFAULT_PROPAGATE_CLIENT_ACCEPT_ENCODING;
 import static io.gravitee.node.vertx.client.http.VertxHttpClientOptions.DEFAULT_PROTOCOL_VERSION;
@@ -86,6 +88,12 @@ public class HttpClientOptions implements Serializable {
     @Builder.Default
     // By default, we limit the number of concurrent connections to 20, the default coming from io.gravitee.node.vertx.client.http.VertxHttpClientOptions (100) being a bit too high.
     private int maxConcurrentConnections = 20;
+
+    @Builder.Default
+    private int maxWaitQueueSize = DEFAULT_MAX_WAIT_QUEUE_SIZE;
+
+    @Builder.Default
+    private long maxConnectionLifetime = DEFAULT_MAX_CONNECTION_LIFETIME;
 
     @Builder.Default
     private boolean useCompression = DEFAULT_USE_COMPRESSION;
