@@ -38,7 +38,7 @@
         <mapstruct.version>1.6.3</mapstruct.version>
         <gravitee-node.version>9.8.1</gravitee-node.version>
         <gravitee-secret-api.version>2.0.0</gravitee-secret-api.version>
-        <lombok.version>1.18.46</lombok.version>
+        <lombok.version>1.18.48</lombok.version>
     </properties>
 
     <dependencyManagement>
